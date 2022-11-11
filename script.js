@@ -42,40 +42,36 @@ class Graph {
 }
 
 let chessboard = [];
-
 function squares(size = 8) {
-    
-    for(let i = 0; i < size; i++) {
-        for(let j = 0; j < size; j++) {
+    for(let i = 1; i <= size; i++) {
+        for(let j = 1; j <= size; j++) {
             chessboard.push([i, j]);
         } 
     }
 }
 
+squares(8);
+
 var g = new Graph(chessboard.length);
 
-for (let i = 0; i < chessboard.length; i++) {
+for (let i = 1; i < chessboard.length; i++) {
     g.addVertex(chessboard[i]);
 }
-/*
-function possibleMoves(board = squares(8)) {
-    for(i = 0; i < board.length; i++) {
-        const arr = board[i].split(",");
-        const x = parseInt(arr[0]);
-        const y = parseInt(arr[1]);
 
-        const moves = {
-            1: [x + 1, y + 2],
-            2: [x + 2, y + 1],
-            3: [x + 2, y - 1],
-            4: [x + 1, y - 2],
-            5: [x - 1, y - 2],
-            6: [x - 2, y - 1],
-            7: [x - 2, y + 1],
-            8: [x - 1, y + 2]
-        }
-    }
+for(i = 0; i < chessboard.length; i++) {
+    const arr = chessboard[i].split(",");
+    const x = parseInt(arr[0]);
+    const y = parseInt(arr[1]);
+
+    g.addEdge(board[i],[x + 1, y + 2]) 
+    g.addEdge(board[i],[x + 2, y + 1]) 
+    g.addEdge(board[i],[x + 2, y - 1]) 
+    g.addEdge(board[i],[x + 1, y - 2]) 
+    g.addEdge(board[i],[x - 1, y - 2]) 
+    g.addEdge(board[i],[x - 2, y - 1]) 
+    g.addEdge(board[i],[x - 2, y + 1]) 
+    g.addEdge(board[i],[x - 1, y + 2]) 
     
-}
-
-document.write(squares(8));*/
+} 
+console.log(chessboard);
+g.printGraph();
