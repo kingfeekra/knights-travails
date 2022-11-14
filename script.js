@@ -7,7 +7,9 @@ class Graph {
     addVertex(v) {
         // initialize the adjacent list with a
         // null array
-        this.AdjList.set(v, []);
+        let key = v;
+        this.AdjList.set(key, []);
+        console.log(this.AdjList);
     }
 
     addEdge(v, w) {
@@ -54,24 +56,35 @@ squares(8);
 
 var g = new Graph(chessboard.length);
 
-for (let i = 1; i < chessboard.length; i++) {
+for (let i = 0; i < chessboard.length; i++) {
     g.addVertex(chessboard[i]);
 }
 
 for(i = 0; i < chessboard.length; i++) {
-    const arr = chessboard[i].split(",");
+    const arr = chessboard[i].toString().split(",");
     const x = parseInt(arr[0]);
     const y = parseInt(arr[1]);
 
-    g.addEdge(board[i],[x + 1, y + 2]) 
-    g.addEdge(board[i],[x + 2, y + 1]) 
-    g.addEdge(board[i],[x + 2, y - 1]) 
-    g.addEdge(board[i],[x + 1, y - 2]) 
-    g.addEdge(board[i],[x - 1, y - 2]) 
-    g.addEdge(board[i],[x - 2, y - 1]) 
-    g.addEdge(board[i],[x - 2, y + 1]) 
-    g.addEdge(board[i],[x - 1, y + 2]) 
+    const array = g.AdjList.get(chessboard[i]);
+    console.log(Array.isArray(array));
+    array.push([x + 1, y + 2]);
+    array.push([x + 2, y + 1]);
+    array.push([x + 2, y - 1]);
+    array.push([x + 1, y - 2]);
+    array.push([x - 1, y - 2]);
+    array.push([x - 2, y + 2]);
+    array.push([x - 2, y + 1]);
+    array.push([x - 1, y + 2]);
+    console.log(array);
+    
+    /*g.addEdge(chessboard[i],[x + 1, y + 2]) 
+    g.addEdge(chessboard[i],[x + 2, y + 1]) 
+    g.addEdge(chessboard[i],[x + 2, y - 1]) 
+    g.addEdge(chessboard[i],[x + 1, y - 2]) 
+    g.addEdge(chessboard[i],[x - 1, y - 2]) 
+    g.addEdge(chessboard[i],[x - 2, y - 1]) 
+    g.addEdge(chessboard[i],[x - 2, y + 1]) 
+    g.addEdge(chessboard[i],[x - 1, y + 2]) */
     
 } 
-console.log(chessboard);
-g.printGraph();
+//g.printGraph();
