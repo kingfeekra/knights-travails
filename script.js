@@ -9,7 +9,6 @@ class Graph {
         // null array
         let key = v;
         this.AdjList.set(key, []);
-        console.log(this.AdjList);
     }
 
     addEdge(v, w) {
@@ -66,25 +65,21 @@ for(i = 0; i < chessboard.length; i++) {
     const y = parseInt(arr[1]);
 
     const array = g.AdjList.get(chessboard[i]);
-    console.log(Array.isArray(array));
+    //console.log(Array.isArray(array));
     array.push([x + 1, y + 2]);
     array.push([x + 2, y + 1]);
     array.push([x + 2, y - 1]);
     array.push([x + 1, y - 2]);
     array.push([x - 1, y - 2]);
-    array.push([x - 2, y + 2]);
+    array.push([x - 2, y - 1]);
     array.push([x - 2, y + 1]);
     array.push([x - 1, y + 2]);
-    console.log(array);
     
-    /*g.addEdge(chessboard[i],[x + 1, y + 2]) 
-    g.addEdge(chessboard[i],[x + 2, y + 1]) 
-    g.addEdge(chessboard[i],[x + 2, y - 1]) 
-    g.addEdge(chessboard[i],[x + 1, y - 2]) 
-    g.addEdge(chessboard[i],[x - 1, y - 2]) 
-    g.addEdge(chessboard[i],[x - 2, y - 1]) 
-    g.addEdge(chessboard[i],[x - 2, y + 1]) 
-    g.addEdge(chessboard[i],[x - 1, y + 2]) */
-    
+    for(let j = array.length-1; j >= 0; j--) { //must interate backwards or splice will skip indexes
+        if(array[j].includes(-2) || array[j].includes(-1) || array[j].includes(0)
+        || array[j].includes(9) || array[j].includes(10)) {
+        array.splice(j, 1);
+        }  
+    }
 } 
-//g.printGraph();
+g.printGraph();
