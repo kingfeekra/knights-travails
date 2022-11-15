@@ -82,4 +82,39 @@ for(i = 0; i < chessboard.length; i++) {
         }  
     }
 } 
-g.printGraph();
+
+function bfs(root, goal) {
+    let adj = g.AdjList;
+    console.log(adj);
+    const queue = [];
+    queue.push(root);
+
+    const discovered = [];
+    discovered[root] = true;
+
+    const edges = [];
+    edges[root] = 0;
+
+    while(queue.length) {
+        let v = queue.shift();
+        console.log(v);
+
+        if (v === goal) {
+            return edges;
+        }
+
+        for (let i = 0; i < adj[v].length; i++) {
+            if (!discovered[adj[v][i]]) {
+                discovered[adj[v][i]] = true;
+                queue.push(adj[v][i]);
+            }
+        }
+    }
+
+    return false;
+}
+
+//console.log(g.AdjList.get([1,2]));
+bfs(chessboard[1], chessboard[3]);
+
+//g.printGraph();
