@@ -1,120 +1,110 @@
 class Graph {
-    constructor(noOfVertices) {
-        this.noOfVertices = noOfVertices;
-        this.AdjList = new Map();
+    constructor() {
+        this.vertices = [];
+        this.adjacent = {};
+        this.edges = 0;
     }
 
     addVertex(v) {
-        // initialize the adjacent list with a
-        // null array
-        let key = v;
-        this.AdjList.set(key, []);
+        this.vertices.push(v);
+        this.adjacent[v] = [];
     }
 
     addEdge(v, w) {
-        // get the list for vertex v and put the
-        // vertex w denoting edge between v and w
-        this.AdjList.get(v).push(w);
-    
-        // Since graph is undirected,
-        // add an edge from w to v also
-        this.AdjList.get(w).push(v);
+        let test = w;
+        if(test.includes(-1) || test.includes(0)
+           || test.includes(9) || test.includes(10)) {
+            return;
+        } //get rid of coordinates not on chessboard
+            
+        this.adjacent[v].push(w);
+        //this.adjacent[w].push(v);
+        this.edges++;
     }
 
-    printGraph() {
-        // get all the vertices
-        var get_keys = this.AdjList.keys();
-    
-        for(let i of get_keys) {
-            // great the corresponding adjacency list
-            // for the vertex
-            var get_values = this.AdjList.get(i);
-            var conc = "";
-    
-            // iterate over the adjacency list
-            // concatenate the values into a string
-            for (var j of get_values)
-                conc += j + " ";
-    
-            // print the vertex and its adjacency list
-            console.log(i + " -> " + conc);
-        }
-    }
-}
+    bfs(root, goal) { //breadth first search algorithm
+        let adj = this.adjacent;
+        
+        const queue = [];
+        queue.push(root);
 
-let chessboard = [];
-function squares(size = 8) {
-    for(let i = 1; i <= size; i++) {
-        for(let j = 1; j <= size; j++) {
-            chessboard.push([i, j]);
-        } 
-    }
-}
+        const discovered = [];
+        discovered[root] = true;
+        
+        const edges = [];
+        edges[root] = 0;
 
-squares(8);
+        //add vertices array and initialize it with root
+        const predecessors = [];
+        predecessors[root] = null;
 
-var g = new Graph(chessboard.length);
+        const buildPath = (goal, root, predecessors) => {
+            const stack = []; //declare and initialize a "stack"
+            stack.push(goal); //push our goal to the stack
 
-for (let i = 0; i < chessboard.length; i++) {
-    g.addVertex(chessboard[i]);
-}
+            let u = predecessors[goal];
 
-for(i = 0; i < chessboard.length; i++) {
-    const arr = chessboard[i].toString().split(",");
-    const x = parseInt(arr[0]);
-    const y = parseInt(arr[1]);
+            while(u != root) {
+                stack.push(u); //push each predecessor to the stack
+                u = predecessors[u];
+            }
 
-    const array = g.AdjList.get(chessboard[i]);
-    //console.log(Array.isArray(array));
-    array.push([x + 1, y + 2]);
-    array.push([x + 2, y + 1]);
-    array.push([x + 2, y - 1]);
-    array.push([x + 1, y - 2]);
-    array.push([x - 1, y - 2]);
-    array.push([x - 2, y - 1]);
-    array.push([x - 2, y + 1]);
-    array.push([x - 1, y + 2]);
-    
-    for(let j = array.length-1; j >= 0; j--) { //must interate backwards or splice will skip indexes
-        if(array[j].includes(-2) || array[j].includes(-1) || array[j].includes(0)
-        || array[j].includes(9) || array[j].includes(10)) {
-        array.splice(j, 1);
-        }  
-    }
-} 
+            stack.push(root);
 
-function bfs(root, goal) {
-    let adj = g.AdjList;
-    console.log(adj);
-    const queue = [];
-    queue.push(root);
+            let path = stack.reverse().join('-->'); //join coordinates together to form path
 
-    const discovered = [];
-    discovered[root] = true;
-
-    const edges = [];
-    edges[root] = 0;
-
-    while(queue.length) {
-        let v = queue.shift();
-        console.log(v);
-
-        if (v === goal) {
-            return edges;
+            return path;
         }
 
-        for (let i = 0; i < adj[v].length; i++) {
-            if (!discovered[adj[v][i]]) {
-                discovered[adj[v][i]] = true;
-                queue.push(adj[v][i]);
+        while(queue.length) {
+            let v = queue.shift();
+            console.log(v);
+
+            if (v === goal) { //if our goal comes up in queue, return shortest path to goal
+                return {
+                    path: buildPath(goal, root, predecessors)
+                }
+            }
+
+            for (let i = 0; i < adj[v].length; i++) {
+                if (!discovered[adj[v][i]]) {
+                    discovered[adj[v][i]] = true; //if next vertex not discovered, make it discovered
+                    queue.push(adj[v][i]); //push next vertex to queue
+                    edges[adj[v][i]] = edges[v] + 1; //edges of previous vertex plus 1
+                    predecessors[adj[v][i]] = v //create a key in vertices array with the current vertex
+                    //assign it a value of its predecessor
+                }
             }
         }
-    }
 
-    return false;
+        return false;
+    }
 }
 
-//console.log(g.AdjList.get([1,2]));
-bfs(chessboard[1], chessboard[3]);
+const g = new Graph();
+function addVertsAndEdges() {
 
-//g.printGraph();
+    for(let i = 1; i < 9; i++) {
+        for(let j = 1; j < 9; j++) {
+            g.addVertex(`${i},${j}`); //must be added as string, adding as array causes problems
+        }
+    }
+
+    for(let i = 1; i < 9; i++) {
+        for(let j = 1; j < 9; j++) { //coordinates must be added as strings, adding as arrays causes problems
+            g.addEdge(`${i},${j}`,`${i + 1},${j + 2}`);
+            g.addEdge(`${i},${j}`,`${i + 2},${j + 1}`);
+            g.addEdge(`${i},${j}`,`${i + 2},${j - 1}`);
+            g.addEdge(`${i},${j}`,`${i + 1},${j - 2}`);
+            g.addEdge(`${i},${j}`,`${i - 1},${j - 2}`);
+            g.addEdge(`${i},${j}`,`${i - 2},${j - 1}`);
+            g.addEdge(`${i},${j}`,`${i - 2},${j + 1}`);
+            g.addEdge(`${i},${j}`,`${i - 1},${j + 2}`);
+        }
+    }
+    
+}
+
+addVertsAndEdges();
+console.log(g.bfs("1,1","5,4"));
+//console.log(chessboard);
