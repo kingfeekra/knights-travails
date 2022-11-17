@@ -22,7 +22,7 @@ class Graph {
         this.edges++;
     }
 
-    bfs(root, goal) { //breadth first search algorithm
+    bfs(root, goal) { //breadth first search algorithm to find shortest path between two squares
         let adj = this.adjacent;
         
         const queue = [];
@@ -58,11 +58,10 @@ class Graph {
 
         while(queue.length) {
             let v = queue.shift();
-            console.log(v);
 
             if (v === goal) { //if our goal comes up in queue, return shortest path to goal
                 return {
-                    path: buildPath(goal, root, predecessors)
+                    ShortestPath: buildPath(goal, root, predecessors)
                 }
             }
 
@@ -105,6 +104,9 @@ function addVertsAndEdges() {
     
 }
 
+let startingSquare = "1,1"; //must be a string
+let endingSquare = "5,4";
+
 addVertsAndEdges();
-console.log(g.bfs("1,1","5,4"));
-//console.log(chessboard);
+console.log(`The shortest path from ${startingSquare} to ${endingSquare}:`);
+console.log(g.bfs(startingSquare,endingSquare));
