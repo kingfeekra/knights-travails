@@ -1,6 +1,6 @@
 # knights-travails
 
-[Assignment](https://www.theodinproject.com/lessons/javascript-knights-travails) completed as part of [The Odin Project)(https://www.theodinproject.com/paths) curriculum.
+[Assignment](https://www.theodinproject.com/lessons/javascript-knights-travails) completed as part of [The Odin Project](https://www.theodinproject.com/paths) curriculum.
 
 The script implements a graph data structure and a breadth-first
 search algorithm to find the shortest path between two squares for a knight piece on a chessboard. A knight can only move three squares
